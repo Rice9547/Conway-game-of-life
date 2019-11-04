@@ -81,8 +81,11 @@ void draw() {
 }
 
 void keyPressed() {
+  if (key == 'Q' || key == 'q') {
+    noLoop();
+  }
   if (key == 'W' || key == 'w') {
-    speed += 10;
+    speed = min(speed + 10, 1500);
   }
   if (key == 'D' || key == 'd') {
     speed = max(0, speed - 10);
