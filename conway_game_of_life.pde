@@ -1,7 +1,8 @@
-int N = width, M = height, R = 10, K = 100;
+int N = width, M = height, R = 10, K = 1000;
 int X = N / R, Y = M / R;
 boolean[][] exist = new boolean[X + 2][Y + 2];
 color[][] pointColor = new color[X + 2][Y + 2];
+//{left-bot}, {}, {right-bot}, {}, {}, {}, {right-top}, {left-top}
 int[][] move = {{1, -1}, {1, 0}, {1, 1}, {0, -1}, {0, 1}, {-1, 0}, {-1, 1}, {-1, -1}};
 int moveIndex;
 int COLOR_MODE = -1; //-1 = black, 1 = random
@@ -49,9 +50,13 @@ void setup() {
   Y = M / R;
   exist = new boolean[X + 2][Y + 2];
   pointColor = new color[X + 2][Y + 2];
+  groupIndex = new int[X + 2][Y + 2];
+  groupLength = 0;
   speed = 0;
   init();
-}  
+}
+
+boolean run = true;
 void draw() {
   background(255);
   for(int i=1; i<=X; i++)
@@ -61,23 +66,13 @@ void draw() {
         fill(pointColor[i][j]);
         ellipse((i - 0.5) * R, (j - 0.5) * R, R, R);
       }
-  boolean[][] temp = new boolean[X+2][Y+2];
-  for(int i=1; i<=X; i++)
-    for(int j=1; j<=Y; j++) {
-      int count = 0;
-      for(int k=0; k<8; k++) {
-        if (getValue(i + move[k][0], j + move[k][1])) {
-          count++;
-        }
-      }
-      temp[i][j] = getValue(i, j);
-      if (getValue(i, j)) {
-        if (count < 2 || count > 3) temp[i][j] = false;
-      } else if (count == 3) temp[i][j] = true;
-    }
-  for(int i=1; i<=X; i++)
-    for(int j=1; j<=Y; j++) setValue(i, j, temp[i][j]);
-  delay(speed);
+  if (run) {
+    conway();
+  } else {
+    pointMove();
+  }
+  run = !run;
+  delay(100);
 }
 
 void keyPressed() {
