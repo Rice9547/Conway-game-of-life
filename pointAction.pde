@@ -4,18 +4,18 @@ void conway() {
     for(int j=1; j<=Y; j++) {
       int count = 0;
       for(int k=0; k<8; k++) {
-        if (getValue(i + move[k][0], j + move[k][1])) {
+        if (points[i + move[k][0]][j + move[k][1]].exist) {
           count++;
         }
       }
-      temp[i][j] = getValue(i, j);
-      if (getValue(i, j)) {
+      temp[i][j] = points[i][j].exist;
+      if (points[i][j].exist) {
         if (count < 2 || count > 3) temp[i][j] = false;
       } else if (count == 3) temp[i][j] = true;
     }
   for(int i=1; i<=X; i++)
     for(int j=1; j<=Y; j++)
-      exist[i][j] = temp[i][j];
+      points[i][j].exist = temp[i][j];
 }
 
 void pointMove() {
@@ -28,12 +28,12 @@ void pointMove() {
   }
   for(int i=1; i<=X; i++) {
     for(int j=1; j<=Y; j++) {
-      if (groupIndex[i][j] != -1) {
-        temp[i + move[groupIndex[i][j]][0]][j + move[groupIndex[i][j]][1]] = true;
+      if (points[i][j].exist && points[i][j].group != -1) {
+        temp[i + move[points[i][j].group][0]][j + move[points[i][j].group][1]] = true;
       }
     }
   }
   for(int i=1; i<=X; i++)
     for(int j=1; j<=Y; j++)
-      exist[i][j] = temp[i][j];
+      points[i][j].exist = temp[i][j];
 }
